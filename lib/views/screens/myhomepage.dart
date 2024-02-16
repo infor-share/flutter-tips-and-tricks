@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:tips_and_tricks/views/widget/animation_text.dart';
-import 'package:tips_and_tricks/views/widget/fade_text.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:tips_and_tricks/views/widget/button.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -11,16 +10,55 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  bool _dialVisible = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+      body: ListView(children: [
+        TouchRipplesButton(onTap: () {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('Tap'),
+          ));
+        }),
+      ]),
+      floatingActionButton: SpeedDial(
+        animatedIcon: AnimatedIcons.menu_close,
+        animatedIconTheme: IconThemeData(size: 22.0),
+        // this is ignored if animatedIcon is non null
+        // child: Icon(Icons.add),
+        visible: _dialVisible,
+        curve: Curves.bounceIn,
+        overlayColor: Colors.black,
+        overlayOpacity: 0.5,
+        onOpen: () => print('OPENING DIAL'),
+        onClose: () => print('DIAL CLOSED'),
+        tooltip: 'Speed Dial',
+        heroTag: 'speed-dial-hero-tag',
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        elevation: 8.0,
+        shape: CircleBorder(),
         children: [
-          animated_text(txt: 'Useful tips and tricks'),
-          fade_text(animatedTexts: [
-            FadeAnimatedText('Useful'),
-            FadeAnimatedText('Useful tips and tricks')
-          ])
+          SpeedDialChild(
+              child: Icon(Icons.accessibility),
+              backgroundColor: Colors.red,
+              label: 'First',
+              labelStyle: TextStyle(fontSize: 18),
+              onTap: () => print('FIRST CHILD')),
+          SpeedDialChild(
+            child: Icon(Icons.brush),
+            backgroundColor: Colors.blue,
+            label: 'Second',
+            labelStyle: TextStyle(fontSize: 18),
+            onTap: () => print('SECOND CHILD'),
+          ),
+          SpeedDialChild(
+            child: Icon(Icons.keyboard_voice),
+            backgroundColor: Colors.green,
+            label: 'Third',
+            labelStyle: TextStyle(fontSize: 18),
+            onTap: () => print('THIRD CHILD'),
+          ),
         ],
       ),
     );
